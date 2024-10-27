@@ -28,7 +28,7 @@ services:
       - "8083:8080"
     volumes:
       - .:/app
-  nginx:
+  nginx-server-lord:
     image: nginx:1.27
     ports: 
       - "80:80"

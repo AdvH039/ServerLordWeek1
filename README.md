@@ -1,20 +1,20 @@
 # ServerLordWeek1
 
+## Brief explanation - 
 
-1. Fork this repository as ServerLordWeek1_Name_RollNo
-2. Dockerise the python app and expose it on port 5050 using port mapping 
-3. Make >2 instances of the application and create a docker network using docker-compose containing all the instances and a nginx proxy that distributes the load and is visible on port 80 of host machine
-4. Start with a round robin algorithm for load balancing and explore other options
-5. What algorithm do you think will best suit the needs of a multi tenant SAAS like our cron job manager application? Give your justification in the README.
-6. Give a demonstration of the whole set-up (steps 3-5) through screen shots and brief explanations.
+- The `Dockerfile` imports the python base image, installs flask, copies the files into the working directory (/app), expose port 8080 and specifies the command to be executed when the container runs.
+- The `docker-compose.yml` file spawns 3 containers built from the image created by the above dokcerfile. The data is persisted in the containers by using volumes (bind mounts) and the ports are exposed
+- The `nginx.conf` specifies the nginx config file for this project. The 3 servers (the three containers created by running the compose file) are load balanced (round robin) and health checked. Also gzip compression and chaching are enabled for efficiency.
 
-Resources :
+## Demo of the application-
 
-[Docker](https://www.youtube.com/watch?v=Ud7Npgi6x8E)
+1. Clone the repo and cd into the directory
+2. Enter the following coommad in your terminal
+```bash
+docker compose up
+```
+3. Access the app at http://localhost:80
 
-[Docker compose](https://www.youtube.com/watch?v=HGKfE-cn9y4&t=111s)
+## Best load balancing for a cron job manager - 
 
-[Installation](https://medium.com/@tomer.klein/step-by-step-tutorial-installing-docker-and-docker-compose-on-ubuntu-a98a1b7aaed0https://www.youtube.com/watch?v=HGKfE-cn9y4&t=111s)
-
-[Inspiration for our application](https://healthchecks.io/)
-   
+I feel that for a multi tenant SaaS application, a weighted round robin approach would make the most sense. Tenants demanding more processing power and resources can be assigned servers with higher weights. This will ensure that resources are efficiently utilized.
